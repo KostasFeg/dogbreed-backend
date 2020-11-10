@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/entries
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlY2hwcm9ncmVla0BnbWFpbC5jb20iLCJpZCI6IjVmOTAwZTYyNTBhNmExMzdkOGEzMTJhMSIsImlhdCI6MTYwMzI3NzUzN30.OH83_W5_al2e_4-j97zrMODRIF2T_w8WFXnQ2JO76Mc
+
+{   
+    "photoUrl": "https://www.aek365.org/",
+    "title": "aekmonfo",
+    "description": "pipitfsssopapi"
+    
+}
