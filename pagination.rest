@@ -1,1 +1,1 @@
-GET http://localhost:3003/api/entries?page=1&limit=3&query=
+GET http://localhost:3003/api/entries?page=1&limit=3&query=dog
