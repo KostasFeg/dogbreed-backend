@@ -11,15 +11,18 @@ const toBePaginated = Entry.find({}).populate('user', {
   name: 1,
 });
 
-entriesRouter.get('/', paginatedResults(Entry), (request, response) => {
+entriesRouter.get('/', paginatedResults(Entry, User), (request, response) => {
   response.json(response.paginatedResults);
 });
 
-function paginatedResults(model) {
+function paginatedResults(model, userModel) {
   return async (req, res, next) => {
     const page = parseInt(req.query.page);
     const limit = parseInt(req.query.limit);
     const query = String(req.query.query);
+    const curUser = String(req.query.curUser);
+
+    console.log(curUser);
 
     console.log(query);
 
@@ -32,6 +35,7 @@ function paginatedResults(model) {
     const endIndex = page * limit;
 
     const results = {};
+    const userResults = {};
 
     model.countDocuments({}, function (err, c) {
       results.docs = c;
@@ -52,6 +56,41 @@ function paginatedResults(model) {
     }
 
     try {
+      if (curUser !== 'undefined' && curUser !== null && curUser !== '') {
+        userResults.results = await userModel
+          .find({ username: curUser })
+          .sort({ _id: -1 })
+          .populate('entries')
+          .limit(limit)
+          .skip(startIndex)
+          .exec();
+
+        const newEntryList = userResults.results[0].entries
+          .reverse()
+          .map((entry) => {
+            const newEntry = {
+              photoUrl: entry.photoUrl,
+              title: entry.title,
+              description: entry.description,
+              results: entry.results,
+              likes: entry.likes,
+              location: entry.location,
+              createdAt: entry.createdAt,
+              updatedAt: entry.updatedAt,
+              id: entry.id,
+              user: { username: curUser },
+            };
+
+            return newEntry;
+          });
+
+        res.paginatedResults = {
+          results: newEntryList,
+        };
+
+        return next();
+      }
+
       results.results = await model
         .find(queried)
         .sort({ _id: -1 })
