@@ -1,14 +1,13 @@
 const config = require('./utils/config');
 const express = require('express');
 const middleware = require('./utils/middleware');
-
 const mongoose = require('mongoose');
-
 const cors = require('cors');
 const entriesRouter = require('./controllers/entries');
 const usersRouter = require('./controllers/users');
 const loginRouter = require('./controllers/login');
 const imagesRouter = require('./controllers/file-upload');
+var path = require('path');
 
 app = express();
 app.use(express.json());
@@ -36,6 +35,9 @@ app.use(express.static('build'));
 app.use('/api/login', loginRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/entries', entriesRouter);
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '/build/index.html'));
+});
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
