@@ -26,14 +26,12 @@ const entrySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-entrySchema.index(
-  {
-    title: 'text',
-    description: 'text',
-    location: 'text',
-  },
-  { language: 'none' }
-);
+entrySchema.index({
+  title: 'text',
+  description: 'text',
+  location: 'text',
+  user: 'text',
+});
 
 entrySchema.set('toJSON', {
   transform: (document, returnedObject) => {
